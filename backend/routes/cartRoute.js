@@ -52,7 +52,7 @@ cartRouter.post("/", async (req, res) => {
     });
 
     if (existingItem) {
-      const newQuantity = existingItem.quantity + quantity;
+      const newQuantity = quantity;
 
       if (newQuantity > product.stock) {
         return res.status(400).json({
