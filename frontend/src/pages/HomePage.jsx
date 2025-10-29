@@ -1,21 +1,10 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 
 import Searchbar from "@/components/homepage/Searchbar";
 import ProductsGrid from "@/components/homepage/ProductsGrid";
 
-const HomePage = () => {
+const HomePage = ({ products, setProducts }) => {
   const [query, setQuery] = useState("");
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const response = await axios("/api/products");
-      const dataWithCart = response.data.map((p) => ({ ...p, inCart: 0 }));
-      setProducts(dataWithCart);
-    };
-    fetchProducts();
-  }, []);
 
   const filteredProducts = products.filter((product) => product.name.toLowerCase().includes(query.toLowerCase()));
 

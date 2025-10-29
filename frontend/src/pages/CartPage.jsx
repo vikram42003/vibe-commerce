@@ -1,31 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Receipt from "../components/Receipt";
 
-const CartPage = () => {
-  const [cart, setCart] = useState({ items: [], total: "0.00", itemCount: 0 });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const CartPage = ({ cart, fetchCart, products, setProducts }) => {
   const [customer, setCustomer] = useState({ name: "", email: "" });
   const [receipt, setReceipt] = useState(null);
 
-  const fetchCart = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get("/api/cart");
-      setCart(data);
-      setError(null);
-    } catch (err) {
-      setError("Failed to fetch cart items. Please try again later.");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchCart();
-  }, []);
+  }, [fetchCart]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -42,9 +25,15 @@ const CartPage = () => {
       const { data } = await axios.post("/api/checkout", customer);
       setReceipt(data.receipt);
       setCustomer({ name: "", email: "" });
-    } catch (err) {
-      alert(`Checkout failed: ${err.response?.data?.message || "Server error"}`);
-      console.error(err);
+
+      // Reset inCart count for products that were in the cart to reflect on the client side that products have been purchased
+      // Without making an extra api call
+      const checkedOutProductIds = new Set(cart.items.map((item) => item.productId._id));
+      const updatedProducts = products.map((p) => (checkedOutProductIds.has(p._id) ? { ...p, inCart: 0 } : p));
+      setProducts(updatedProducts);
+    } catch (e) {
+      console.log("Check out failed");
+      console.log(e);
     }
   };
 
@@ -52,9 +41,6 @@ const CartPage = () => {
     setReceipt(null);
     fetchCart();
   };
-
-  if (loading) return <div className="p-8 text-center">Loading your cart...</div>;
-  if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
 
   return (
     <div className="container mx-auto p-4 sm:p-8 bg-gray-50 min-h-screen">
@@ -77,7 +63,7 @@ const CartPage = () => {
                         alt={item.productId.name}
                         className="w-20 h-20 object-contain mr-4 rounded"
                       />
-                      <div className="flex-grow">
+                      <div className="grow">
                         <h2 className="font-semibold text-gray-800">{item.productId.name}</h2>
                         <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
                       </div>

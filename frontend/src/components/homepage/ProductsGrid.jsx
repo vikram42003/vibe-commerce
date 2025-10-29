@@ -21,6 +21,10 @@ const ProductsGrid = ({ products, setProducts }) => {
   };
 
   const updateCart = async (product) => {
+    if (product.inCart <= 0) {
+      return;
+    }
+
     try {
       if (product.inCart > 0) {
         await axios.delete(`/api/cart/${product._id}`);
@@ -63,7 +67,7 @@ const ProductsGrid = ({ products, setProducts }) => {
                 <button
                   onClick={() => increaseProductInCarthandler(product)}
                   disabled={product.stock <= 0}
-                  className={`cursor-pointer ${product.inCart >= product.stock ? disabled : ""}`}
+                  className={`cursor-pointer ${product.stock <= 0 ? disabled : ""}`}
                 >
                   <PlusIcon size={20} />
                 </button>
@@ -71,9 +75,13 @@ const ProductsGrid = ({ products, setProducts }) => {
               <p>In cart: {product.inCart}</p>
             </div>
 
-            <div className="bg-violet-400 p-2 text-center hover:bg-violet-500 active:bg-violet-600 transition-colors duration-300">
-              <button onClick={() => updateCart(product)}>{addButtonText}</button>
-            </div>
+            <button
+              onClick={() => updateCart(product)}
+              className="bg-violet-400 p-2 w-full text-center hover:bg-violet-500 active:bg-violet-600 transition-colors duration-300"
+              disabled={product.inCart <= 0}
+            >
+              {addButtonText}
+            </button>
           </div>
         );
       })}
