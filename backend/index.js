@@ -1,6 +1,6 @@
 const app = require("./app");
 const config = require("./utils/env");
-const connectDB = require("./config/mongodb");
+const { connectDB } = require("./config/mongodb");
 
 // If the DB connection is successful only then start the express backend
 connectDB().then(() => {
