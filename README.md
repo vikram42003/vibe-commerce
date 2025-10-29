@@ -2,6 +2,7 @@
 # Vibe Commerce
 
 Submitted by - Vikramjit Singh Gill
+Loom video link - https://www.loom.com/share/ab5fcea5a7fd41e79f4fdbc54fb8e1df
 
 Vibe Commerce is a full-stack e-commerce application built with the MERN stack (MongoDB, Express, React, Node.js). It features a complete shopping cart flow, from browsing products to a mock checkout process. This project was developed as a screening assignment to demonstrate proficiency in building modern web applications.
 
