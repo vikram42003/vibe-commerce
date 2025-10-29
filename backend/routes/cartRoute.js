@@ -1,10 +1,11 @@
 const express = require("express");
-const router = express.Router();
 const CartItem = require("../models/Cart");
 const Product = require("../models/Product");
 
+const cartRouter = express.Router();
+
 // GET /api/cart - Get all cart items with total
-router.get("/", async (req, res) => {
+cartRouter.get("/", async (req, res) => {
   try {
     const cartItems = await CartItem.find({ userId: "mock_user" }).populate("productId");
 
@@ -27,7 +28,7 @@ router.get("/", async (req, res) => {
 });
 
 // POST /api/cart - { productID, quantity } - Add item to cart with the specified productID and quantity, both required
-router.post("/", async (req, res) => {
+cartRouter.post("/", async (req, res) => {
   try {
     const { productId, quantity } = req.body;
 
@@ -98,7 +99,7 @@ router.post("/", async (req, res) => {
 });
 
 // DELETE /api/cart/:id - Remove item from cart
-router.delete("/:id", async (req, res) => {
+cartRouter.delete("/:id", async (req, res) => {
   try {
     await CartItem.findByIdAndDelete(req.params.id);
 
@@ -115,4 +116,4 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = cartRouter;

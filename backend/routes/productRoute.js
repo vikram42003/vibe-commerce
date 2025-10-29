@@ -7,10 +7,10 @@ productRouter.get("/", async (req, res) => {
   try {
     res.json(await Product.find({}));
   } catch (e) {
-    const error = new Error("Error fetching products");
+    const error = new Error("Server error while fetching products");
     error.status = 500;
     error.error = e;
-    
+
     throw error;
   }
 });

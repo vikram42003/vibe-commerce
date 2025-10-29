@@ -1,7 +1,10 @@
 const express = require("express");
 const logger = require("./utils/logger");
+
 const productRouter = require("./routes/productRoute");
 const cartRouter = require("./routes/cartRoute");
+const checkoutRouter = require("./routes/checkoutRoute");
+
 const errorHandler = require("./utils/errorHandler");
 
 const app = express();
@@ -12,6 +15,7 @@ app.use(logger);
 
 app.use("/api/products", productRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/checkout", checkoutRouter);
 
 app.use(errorHandler);
 
